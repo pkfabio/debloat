@@ -163,7 +163,8 @@
     Disable-ScheduledTask -TaskName "Microsoft\Windows\Customer Experience Improvement Program\Consolidator" | Out-Null
     Disable-ScheduledTask -TaskName "Microsoft\Windows\Customer Experience Improvement Program\UsbCeip" | Out-Null
     Disable-ScheduledTask -TaskName "Microsoft\Windows\DiskDiagnostic\Microsoft-Windows-DiskDiagnosticDataCollector" | Out-Null
-    Write-Host "Disabling Application suggestions..."
+
+    Write-Host "Desativando sugestões de Aplicativos..."
     Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" -Name "ContentDeliveryAllowed" -Type DWord -Value 0
     Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" -Name "OemPreInstalledAppsEnabled" -Type DWord -Value 0
     Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" -Name "PreInstalledAppsEnabled" -Type DWord -Value 0
@@ -179,7 +180,7 @@
     }
     Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\CloudContent" -Name "DisableWindowsConsumerFeatures" -Type DWord -Value 1
 
-    Write-Host "Disabling Feedback..."
+    Write-Host "Desativando Feedback..."
     If (!(Test-Path "HKCU:\SOFTWARE\Microsoft\Siuf\Rules")) {
         New-Item -Path "HKCU:\SOFTWARE\Microsoft\Siuf\Rules" -Force | Out-Null
     }
@@ -188,48 +189,49 @@
     Disable-ScheduledTask -TaskName "Microsoft\Windows\Feedback\Siuf\DmClient" -ErrorAction SilentlyContinue | Out-Null
     Disable-ScheduledTask -TaskName "Microsoft\Windows\Feedback\Siuf\DmClientOnScenarioDownload" -ErrorAction SilentlyContinue | Out-Null
 
-    Write-Host "Disabling Tailored Experiences..."
+    Write-Host "Desativando experiências personalizadas..."
     If (!(Test-Path "HKCU:\SOFTWARE\Policies\Microsoft\Windows\CloudContent")) {
         New-Item -Path "HKCU:\SOFTWARE\Policies\Microsoft\Windows\CloudContent" -Force | Out-Null
     }
     Set-ItemProperty -Path "HKCU:\SOFTWARE\Policies\Microsoft\Windows\CloudContent" -Name "DisableTailoredExperiencesWithDiagnosticData" -Type DWord -Value 1
 
-    Write-Host "Disabling Advertising ID..."
+    Write-Host "Desativando ID de publicidade..."
     If (!(Test-Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\AdvertisingInfo")) {
         New-Item -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\AdvertisingInfo" | Out-Null
     }
     Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\AdvertisingInfo" -Name "DisabledByGroupPolicy" -Type DWord -Value 1
 
-    Write-Host "Disabling Error reporting..."
+    Write-Host "Desativando relatórios de erro..."
     Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\Windows Error Reporting" -Name "Disabled" -Type DWord -Value 1
     Disable-ScheduledTask -TaskName "Microsoft\Windows\Windows Error Reporting\QueueReporting" | Out-Null
-    Write-Host "Restricting Windows Update P2P only to local network..."
+
+    Write-Host "Restringindo o Windows Update P2P apenas à rede local..."
     If (!(Test-Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Config")) {
         New-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Config" | Out-Null
     }
     Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Config" -Name "DODownloadMode" -Type DWord -Value 1
 
-    Write-Host "Stopping and disabling Diagnostics Tracking Service..."
+    Write-Host "Desativando o serviço de rastreamento de diagnóstico..."
     Stop-Service "DiagTrack" -WarningAction SilentlyContinue
     Set-Service "DiagTrack" -StartupType Disabled
 
-    Write-Host "Stopping and disabling WAP Push Service..."
+    Write-Host "Desativando o serviço WAP Push..."
     Stop-Service "dmwappushservice" -WarningAction SilentlyContinue
     Set-Service "dmwappushservice" -StartupType Disabled
 
-    Write-Host "Enabling F8 boot menu options..."
+    Write-Host "Ativando as opções do menu de inicialização (F8)..."
     bcdedit /set `{current`} bootmenupolicy Legacy | Out-Null
 
-    Write-Host "Disabling Remote Assistance..."
+    Write-Host "Desativando assistência remota..."
     Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\Remote Assistance" -Name "fAllowToGetHelp" -Type DWord -Value 0
 
-    Write-Host "Stopping and disabling Superfetch service..."
+    Write-Host "Desativando o serviço Superfetch..."
     Stop-Service "SysMain" -WarningAction SilentlyContinue
     Set-Service "SysMain" -StartupType Disabled
     
-    # Task Manager Details
+    # Detalhes do gerenciador de tarefas 
     If ((get-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion" -Name CurrentBuild).CurrentBuild -lt 22557) {
-        Write-Host "Showing task manager details..."
+        Write-Host "Exibindo detalhes no gerenciador de tarefas..."
         $taskmgr = Start-Process -WindowStyle Hidden -FilePath taskmgr.exe -PassThru
         Do {
             Start-Sleep -Milliseconds 100
@@ -238,30 +240,30 @@
         Stop-Process $taskmgr
         $preferences.Preferences[28] = 0
         Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\TaskManager" -Name "Preferences" -Type Binary -Value $preferences.Preferences
-    } else {Write-Host "Task Manager patch not run in builds 22557+ due to bug"}
+    } else {Write-Host "Patch do gerenciador de tarefas não roda em versões 22557+ devido a um bug"}
 
-    Write-Host "Showing file operations details..."
+    Write-Host "Mostrando detalhes das operações de arquivo..."
     If (!(Test-Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\OperationStatusManager")) {
         New-Item -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\OperationStatusManager" | Out-Null
     }
     Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\OperationStatusManager" -Name "EnthusiastMode" -Type DWord -Value 1
 
-    Write-Host "Hiding Task View button..."
+    Write-Host "Ocultando o botão de vizualizar tarefas..."
     Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ShowTaskViewButton" -Type DWord -Value 0
 
-    Write-Host "Hiding People icon..."
+    Write-Host "Ocultando ícone de pessoas..."
     If (!(Test-Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced\People")) {
         New-Item -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced\People" | Out-Null
     }
     Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced\People" -Name "PeopleBand" -Type DWord -Value 0
 
-    Write-Host "Changing default Explorer view to This PC..."
+    Write-Host "Alterando a visualização padrão do Explorer..."
     Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "LaunchTo" -Type DWord -Value 1
 
-    Write-Host "Hiding 3D Objects icon from This PC..."
+    Write-Host "Ocultando ícones de objeto 3D..."
     Remove-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\{0DB7E03F-FC29-4DC6-9020-FF41B59E513A}" -Recurse -ErrorAction SilentlyContinue  
 
-    ## Performance Tweaks and More Telemetry
+    ## Aplicando Tweaks e mais Telemetria 
     Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\DriverSearching" -Name "SearchOrderConfig" -Type DWord -Value 00000000
     Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile" -Name "SystemResponsiveness" -Type DWord -Value 0000000a
     Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile" -Name "NetworkThrottlingIndex" -Type DWord -Value 0000000a
@@ -276,32 +278,31 @@
     Set-ItemProperty -Path "HKLM:\SYSTEM\ControlSet001\Services\Ndu" -Name "Start" -Type DWord -Value 00000004
     Set-ItemProperty -Path "HKLM:\Control Panel\Mouse" -Name "MouseHoverTime" -Type DWord -Value 00000010
 
-    # Network Tweaks
+    # Tweaks de rede
     Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters" -Name "IRPStackSize" -Type DWord -Value 20
 
-    # Group svchost.exe processes
+    # Agrupando processos svchost.exe 
     $ram = (Get-CimInstance -ClassName Win32_PhysicalMemory | Measure-Object -Property Capacity -Sum).Sum / 1kb
     Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control" -Name "SvcHostSplitThresholdInKB" -Type DWord -Value $ram -Force
 
-    Write-Host "Disable News and Interests"
+    Write-Host "Desativando Notícias e interesses..."
     Set-ItemProperty -Path "HKCU:\SOFTWARE\Policies\Microsoft\Windows\Windows Feeds" -Name "EnableFeeds" -Type DWord -Value 0
-    # Remove "News and Interest" from taskbar
+    # Remove "Notícias e interesses" da barra de tarefas
     Set-ItemProperty -Path  "HKCU:\Software\Microsoft\Windows\CurrentVersion\Feeds" -Name "ShellFeedsTaskbarViewMode" -Type DWord -Value 2
-
-    # remove "Meet Now" button from taskbar
+    # Remove o botão "Reunir Agora" da barra de tarefas 
     If (!(Test-Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer")) {
         New-Item -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer" -Force | Out-Null
     }
     Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer" -Name "HideSCAMeetNow" -Type DWord -Value 1
 
-    Write-Host "Removing AutoLogger file and restricting directory..."
+    Write-Host "Removendo o arquivo AutoLogger e restringindo o diretório..."
     $autoLoggerDir = "$env:PROGRAMDATA\Microsoft\Diagnosis\ETLLogs\AutoLogger"
     If (Test-Path "$autoLoggerDir\AutoLogger-Diagtrack-Listener.etl") {
         Remove-Item "$autoLoggerDir\AutoLogger-Diagtrack-Listener.etl"
     }
     icacls $autoLoggerDir /deny SYSTEM:`(OI`)`(CI`)F | Out-Null
 
-    Write-Host "Stopping and disabling Diagnostics Tracking Service..."
+    Write-Host "Desativando o serviço de rastreamento de diagnóstico..."
     Stop-Service "DiagTrack"
     Set-Service "DiagTrack" -StartupType Disabled
   
@@ -313,4 +314,198 @@
     Set-ItemProperty -Path "HKLM:\Software\Microsoft\PolicyManager\default\WiFi\AllowWiFiHotSpotReporting" -Name "Value" -Type DWord -Value 0
     Set-ItemProperty -Path "HKLM:\Software\Microsoft\PolicyManager\default\WiFi\AllowAutoConnectToWiFiSenseHotspots" -Name "Value" -Type DWord -Value 0
     
-#
+# Power Throttling
+    Write-Host "Desativando Power Throttling..."
+    Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\Power\PowerThrottling" -Name "PowerThrottlingOff" -Type DWord -Value 00000001
+    Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\Power" -Name "HiberbootEnabled" -Type DWord -Value 0000000
+    
+# Boot NumLock 
+    Write-Host "Ativando NumLock no boot..."
+    If (!(Test-Path "HKU:")) {
+        New-PSDrive -Name HKU -PSProvider Registry -Root HKEY_USERS | Out-Null
+    }
+    Set-ItemProperty -Path "HKU:\.DEFAULT\Control Panel\Keyboard" -Name "InitialKeyboardIndicators" -Type DWord -Value 2
+
+# Extensões de arquivos
+    Write-Host "Exibindo extensões de arquivos conhecidos..."
+    Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "HideFileExt" -Type DWord -Value 0
+
+# Hora UTC
+    Write-Host "Setando Hora da BIOS para UTC..."
+    Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\TimeZoneInformation" -Name "RealTimeIsUniversal" -Type DWord -Value 1
+
+# Efeitos Visuais
+    Write-Host "Configurando efeitos visuais para desempenho..."
+    Set-ItemProperty -Path "HKCU:\Control Panel\Desktop" -Name "DragFullWindows" -Type String -Value 0
+    Set-ItemProperty -Path "HKCU:\Control Panel\Desktop" -Name "MenuShowDelay" -Type String -Value 200
+    Set-ItemProperty -Path "HKCU:\Control Panel\Desktop" -Name "UserPreferencesMask" -Type Binary -Value ([byte[]](144,18,3,128,16,0,0,0))
+    Set-ItemProperty -Path "HKCU:\Control Panel\Desktop\WindowMetrics" -Name "MinAnimate" -Type String -Value 0
+    Set-ItemProperty -Path "HKCU:\Control Panel\Keyboard" -Name "KeyboardDelay" -Type DWord -Value 0
+    Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ListviewAlphaSelect" -Type DWord -Value 0
+    Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ListviewShadow" -Type DWord -Value 0
+    Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "TaskbarAnimations" -Type DWord -Value 0
+    Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects" -Name "VisualFXSetting" -Type DWord -Value 3
+    Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\DWM" -Name "EnableAeroPeek" -Type DWord -Value 0
+
+# Windows apps
+    $Bloatware = @(
+        # Apps desnecessários
+        "Microsoft.3DBuilder"
+        "Microsoft.Microsoft3DViewer"
+        "Microsoft.AppConnector"
+        "Microsoft.BingFinance"
+        "Microsoft.BingNews"
+        "Microsoft.BingSports"
+        "Microsoft.BingTranslator"
+        "Microsoft.BingWeather"
+        "Microsoft.BingFoodAndDrink"
+        "Microsoft.BingHealthAndFitness"
+        "Microsoft.BingTravel"
+        "Microsoft.MinecraftUWP"
+        "Microsoft.GamingServices"
+        # "Microsoft.WindowsReadingList"
+        "Microsoft.GetHelp"
+        "Microsoft.Getstarted"
+        "Microsoft.Messaging"
+        "Microsoft.Microsoft3DViewer"
+        "Microsoft.MicrosoftSolitaireCollection"
+        "Microsoft.NetworkSpeedTest"
+        "Microsoft.News"
+        "Microsoft.Office.Lens"
+        "Microsoft.Office.Sway"
+        "Microsoft.Office.OneNote"
+        "Microsoft.OneConnect"
+        "Microsoft.People"
+        "Microsoft.Print3D"
+        "Microsoft.SkypeApp"
+        "Microsoft.Wallet"
+        "Microsoft.Whiteboard"
+        "Microsoft.WindowsAlarms"
+        "microsoft.windowscommunicationsapps"
+        "Microsoft.WindowsFeedbackHub"
+        "Microsoft.WindowsMaps"
+        "Microsoft.WindowsPhone"
+        "Microsoft.WindowsSoundRecorder"
+        "Microsoft.XboxApp"
+        "Microsoft.ConnectivityStore"
+        "Microsoft.CommsPhone"
+        "Microsoft.ScreenSketch"
+        "Microsoft.Xbox.TCUI"
+        "Microsoft.XboxGameOverlay"
+        "Microsoft.XboxGameCallableUI"
+        "Microsoft.XboxSpeechToTextOverlay"
+        "Microsoft.MixedReality.Portal"
+        "Microsoft.XboxIdentityProvider"
+        "Microsoft.ZuneMusic"
+        "Microsoft.ZuneVideo"
+        #"Microsoft.YourPhone"
+        "Microsoft.Getstarted"
+        "Microsoft.MicrosoftOfficeHub"
+        # -------> Apps de parceiros
+        "*EclipseManager*"
+        "*ActiproSoftwareLLC*"
+        "*AdobeSystemsIncorporated.AdobePhotoshopExpress*"
+        "*Duolingo-LearnLanguagesforFree*"
+        "*PandoraMediaInc*"
+        "*CandyCrush*"
+        "*BubbleWitch3Saga*"
+        "*Wunderlist*"
+        "*Flipboard*"
+        "*Twitter*"
+        "*Facebook*"
+        "*Royal Revolt*"
+        "*Sway*"
+        "*Speed Test*"
+        "*Dolby*"
+        "*Viber*"
+        "*ACGMediaPlayer*"
+        "*Netflix*"
+        "*OneCalendar*"
+        "*LinkedInforWindows*"
+        "*HiddenCityMysteryofShadows*"
+        "*Hulu*"
+        "*HiddenCity*"
+        "*AdobePhotoshopExpress*"
+        "*HotspotShieldFreeVPN*"
+        # -------> Opicionais: 
+        "*Microsoft.Advertising.Xaml*"
+        #"*Microsoft.MSPaint*"
+        #"*Microsoft.MicrosoftStickyNotes*"
+        #"*Microsoft.Windows.Photos*"
+        #"*Microsoft.WindowsCalculator*"
+        #"*Microsoft.WindowsStore*"
+    )
+    
+    Write-Host "Iniciando remoção de Apps desnecessários..."
+    foreach ($Bloat in $Bloatware) {
+    Get-AppxPackage -Name $Bloat| Remove-AppxPackage
+    Get-AppxProvisionedPackage -Online | Where-Object DisplayName -like $Bloat | Remove-AppxProvisionedPackage -Online
+    Write-Host "    Removendo $Bloat."
+    }
+    Write-Host "Fim da remoção de Apps desnecessários..."
+
+#===========================================================================
+# Windows Update
+#===========================================================================
+
+    Write-Host "Desativando atualização de drivers via Windows Update..."
+    If (!(Test-Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\Device Metadata")) {
+        New-Item -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\Device Metadata" -Force | Out-Null
+    }
+    Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\Device Metadata" -Name "PreventDeviceMetadataFromNetwork" -Type DWord -Value 1
+    If (!(Test-Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\DriverSearching")) {
+        New-Item -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\DriverSearching" -Force | Out-Null
+    }
+    Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\DriverSearching" -Name "DontPromptForWindowsUpdate" -Type DWord -Value 1
+    Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\DriverSearching" -Name "DontSearchWindowsUpdate" -Type DWord -Value 1
+    Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\DriverSearching" -Name "DriverUpdateWizardWuSearchEnabled" -Type DWord -Value 0
+    If (!(Test-Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate")) {
+        New-Item -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate" | Out-Null
+    }
+    Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate" -Name "ExcludeWUDriversInQualityUpdate" -Type DWord -Value 1
+    Write-Host "Disabling Windows Update automatic restart..."
+    If (!(Test-Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU")) {
+        New-Item -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU" -Force | Out-Null
+    }
+    Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU" -Name "NoAutoRebootWithLoggedOnUsers" -Type DWord -Value 1
+    Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU" -Name "AUPowerManagement" -Type DWord -Value 0
+    
+    Write-Host "Ativando apenas updates de segurança..."
+    Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\WindowsUpdate\UX\Settings" -Name "BranchReadinessLevel" -Type DWord -Value 20
+    Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\WindowsUpdate\UX\Settings" -Name "DeferFeatureUpdatesPeriodInDays" -Type DWord -Value 365
+    Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\WindowsUpdate\UX\Settings" -Name "DeferQualityUpdatesPeriodInDays " -Type DWord -Value 4
+
+#===========================================================================
+# Programas
+#===========================================================================
+
+# .Net Framework (2,3,4)
+    Enable-WindowsOptionalFeature -Online -FeatureName "NetFx4-AdvSrvs" -All
+    Enable-WindowsOptionalFeature -Online -FeatureName "NetFx3" -All
+
+# Winget 
+    $wingetinstall = New-Object System.Collections.Generic.List[System.Object]
+
+    $wingetinstall.Add("eloston.ungoogled-chromium")
+    $wingetinstall.Add("LibreWolf.LibreWolf")
+    $wingetinstall.Add("Discord.Discord")
+    $wingetinstall.Add("EpicGames.EpicGamesLauncher")
+    $wingetinstall.Add("Valve.Steam")
+    $wingetinstall.Add("OBSProject.OBSStudio")
+    $wingetinstall.Add("VideoLAN.VLC")
+    $wingetinstall.Add("7zip.7zip")
+    $wingetinstall.Add("KeePassXCTeam.KeePassXC")
+
+    $wingetinstall.ToArray()
+    # Define Output variable
+    $wingetResult = New-Object System.Collections.Generic.List[System.Object]
+    foreach ( $node in $wingetinstall )
+    {
+        Start-Process powershell.exe -Verb RunAs -ArgumentList "-command winget install -e --accept-source-agreements --accept-package-agreements --silent $node | Out-Host" -Wait -WindowStyle Maximized
+        $wingetResult.Add("$node`n")
+    }
+    $wingetResult.ToArray()
+    $wingetResult | % { $_ } | Out-Host
+
+    Write-Host "Programas instalados..."
+    Write-Host "$wingetResult"
