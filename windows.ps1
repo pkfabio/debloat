@@ -6,6 +6,21 @@
 #>
 
 #===========================================================================
+# Conta de usuário
+#===========================================================================
+
+# Profile
+    Write-Host "Alterando diretório de profile"
+    New-Item -ItemType "Directory" -Path "D:\Profile" -Force | Out-Null
+    Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\ProfileList" -Name "ProfilesDirectory" -Type String -Value "D:\Profile"
+    
+# Usuário
+    Write-Host "Informe a senha para o novo usuário..."
+    $Password = Read-Host -AsSecureString
+    New-LocalUser "pk" -Password $Password -FullName "Fábio" -Description "Usuário padrão"
+    Add-LocalGroupMember -Group "Administrators" -Member "pk"
+    
+#===========================================================================
 # Tweak's
 #===========================================================================
 
@@ -508,4 +523,4 @@
     $wingetResult | % { $_ } | Out-Host
 
     Write-Host "Programas instalados..."
-    Write-Host "$wingetResult"
+    Write-Host $wingetResult
