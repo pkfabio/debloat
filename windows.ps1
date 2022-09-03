@@ -503,7 +503,10 @@
     $wingetinstall.Add("VideoLAN.VLC")
     $wingetinstall.Add("7zip.7zip")
     $wingetinstall.Add("KeePassXCTeam.KeePassXC")
-
+    $wingetinstall.Add("Oracle.VirtualBox")
+    $wingetinstall.Add("9P1TBXR6QDCX") # HyperX nGENUITY
+    $wingetinstall.Add("WhatsApp.WhatsApp")
+    
     $wingetinstall.ToArray()
     # Define Output variable
     $wingetResult = New-Object System.Collections.Generic.List[System.Object]
