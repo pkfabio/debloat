@@ -10,19 +10,19 @@
 #===========================================================================
 
 # Profile
-    Write-Host "Alterando diretório de profile"
-    New-Item -ItemType "Directory" -Path "D:\Profile" -Force | Out-Null
-    Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\ProfileList" -Name "ProfilesDirectory" -Type String -Value "D:\Profile"
+#    Write-Host "Alterando diretório de profile"
+#    New-Item -ItemType "Directory" -Path "D:\Profile" -Force | Out-Null
+#    Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\ProfileList" -Name "ProfilesDirectory" -Type String -Value "D:\Profile"
     
 # Usuário
-    Write-Host "Informe a senha para o novo usuário..."
-    $Password = Read-Host -AsSecureString
-    New-LocalUser "pk" -Password $Password -FullName "Fábio" -Description "Usuário padrão"
-    Add-LocalGroupMember -Group "Administrators" -Member "pk"
+#    Write-Host "Informe a senha para o novo usuário..."
+#    $Password = Read-Host -AsSecureString
+#    New-LocalUser "pk" -Password $Password -FullName "Fábio" -Description "Usuário padrão"
+#    Add-LocalGroupMember -Group "Administrators" -Member "pk"
     
 # Nome e Grupo do computador 
-   Rename-Computer -NewName "Fabio-pc"
-	Add-Computer -WorkGroupName "LAN"
+#   Rename-Computer -NewName "Fabio-pc"
+#   Add-Computer -WorkGroupName "LAN"
 
 #===========================================================================
 # Tweak's
@@ -39,11 +39,11 @@
     Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\System" -Name "UploadUserActivities" -Type DWord -Value 0
   
 # DVR de Jogos (captura de tela /xbox bar)
-    Write-Host "Desativando DVR de Jogos..."
-    Set-ItemProperty -Path "HKLM:\System\GameConfigStore" -Name "GameDVR_DXGIHonorFSEWindowsCompatible" -Type Hex -Value 00000000
-    Set-ItemProperty -Path "HKLM:\System\GameConfigStore" -Name "GameDVR_HonorUserFSEBehaviorMode" -Type Hex -Value 00000000
-    Set-ItemProperty -Path "HKLM:\System\GameConfigStore" -Name "GameDVR_EFSEFeatureFlags" -Type Hex -Value 00000000
-    Set-ItemProperty -Path "HKLM:\System\GameConfigStore" -Name "GameDVR_Enabled" -Type DWord -Value 00000000
+#    Write-Host "Desativando DVR de Jogos..."
+#    Set-ItemProperty -Path "HKLM:\System\GameConfigStore" -Name "GameDVR_DXGIHonorFSEWindowsCompatible" -Type Hex -Value 00000000
+#    Set-ItemProperty -Path "HKLM:\System\GameConfigStore" -Name "GameDVR_HonorUserFSEBehaviorMode" -Type Hex -Value 00000000
+#    Set-ItemProperty -Path "HKLM:\System\GameConfigStore" -Name "GameDVR_EFSEFeatureFlags" -Type Hex -Value 00000000
+#    Set-ItemProperty -Path "HKLM:\System\GameConfigStore" -Name "GameDVR_Enabled" -Type DWord -Value 00000000
   
 # Hibernação
     Write-Host "Desativando Hibernação..."
@@ -96,7 +96,7 @@
         "DPS"                                          # O Serviço de Política de Diagnóstico permite detecção, solução e resolução de problemas em componentes do Windows
         "edgeupdate"                                   # Serviço de updates Edge
         "edgeupdatem"                                  # Outro serviço de update
-        "EntAppSvc"                                    # Serviço de Gerenciamento de Aplicativos Empresariais
+       #"EntAppSvc"                                    # Serviço de Gerenciamento de Aplicativos Empresariais
         "Fax"                                          # Serviço de Fax
         "fhsvc"                                        # Histórico de Fax
         "FontCache"                                    # Serviço de Cache de Fontes do Windows
@@ -279,18 +279,18 @@
 
     ## Aplicando Tweaks e mais Telemetria 
     Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\DriverSearching" -Name "SearchOrderConfig" -Type DWord -Value 00000000
-    Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile" -Name "SystemResponsiveness" -Type DWord -Value 0000000a
-    Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile" -Name "NetworkThrottlingIndex" -Type DWord -Value 0000000a
+#    Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile" -Name "SystemResponsiveness" -Type DWord -Value 0000000a
+#    Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile" -Name "NetworkThrottlingIndex" -Type DWord -Value 0000000a
     Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control" -Name "WaitToKillServiceTimeout" -Type DWord -Value 2000
-    Set-ItemProperty -Path "HKLM:\Control Panel\Desktop" -Name "MenuShowDelay" -Type DWord -Value 0
-    Set-ItemProperty -Path "HKLM:\Control Panel\Desktop" -Name "WaitToKillAppTimeout" -Type DWord -Value 5000
-    Set-ItemProperty -Path "HKLM:\Control Panel\Desktop" -Name "HungAppTimeout" -Type DWord -Value 4000
-    Set-ItemProperty -Path "HKLM:\Control Panel\Desktop" -Name "AutoEndTasks" -Type DWord -Value 1
-    Set-ItemProperty -Path "HKLM:\Control Panel\Desktop" -Name "LowLevelHooksTimeout" -Type DWord -Value 00001000
-    Set-ItemProperty -Path "HKLM:\Control Panel\Desktop" -Name "WaitToKillServiceTimeout" -Type DWord -Value 00002000
+#    Set-ItemProperty -Path "HKLM:\Control Panel\Desktop" -Name "MenuShowDelay" -Type DWord -Value 0
+#    Set-ItemProperty -Path "HKLM:\Control Panel\Desktop" -Name "WaitToKillAppTimeout" -Type DWord -Value 5000
+#    Set-ItemProperty -Path "HKLM:\Control Panel\Desktop" -Name "HungAppTimeout" -Type DWord -Value 4000
+#    Set-ItemProperty -Path "HKLM:\Control Panel\Desktop" -Name "AutoEndTasks" -Type DWord -Value 1
+#    Set-ItemProperty -Path "HKLM:\Control Panel\Desktop" -Name "LowLevelHooksTimeout" -Type DWord -Value 00001000
+#    Set-ItemProperty -Path "HKLM:\Control Panel\Desktop" -Name "WaitToKillServiceTimeout" -Type DWord -Value 00002000
     Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" -Name "ClearPageFileAtShutdown" -Type DWord -Value 00000000
     Set-ItemProperty -Path "HKLM:\SYSTEM\ControlSet001\Services\Ndu" -Name "Start" -Type DWord -Value 00000004
-    Set-ItemProperty -Path "HKLM:\Control Panel\Mouse" -Name "MouseHoverTime" -Type DWord -Value 00000010
+#    Set-ItemProperty -Path "HKLM:\Control Panel\Mouse" -Name "MouseHoverTime" -Type DWord -Value 00000010
 
     # Tweaks de rede
     Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters" -Name "IRPStackSize" -Type DWord -Value 20
@@ -300,7 +300,7 @@
     Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control" -Name "SvcHostSplitThresholdInKB" -Type DWord -Value $ram -Force
 
     Write-Host "Desativando Notícias e interesses..."
-    Set-ItemProperty -Path "HKCU:\SOFTWARE\Policies\Microsoft\Windows\Windows Feeds" -Name "EnableFeeds" -Type DWord -Value 0
+#    Set-ItemProperty -Path "HKCU:\SOFTWARE\Policies\Microsoft\Windows\Windows Feeds" -Name "EnableFeeds" -Type DWord -Value 0
 
     # Remove "Notícias e interesses" da barra de tarefas
     Set-ItemProperty -Path  "HKCU:\Software\Microsoft\Windows\CurrentVersion\Feeds" -Name "ShellFeedsTaskbarViewMode" -Type DWord -Value 2
@@ -332,7 +332,7 @@
     
 # Power Throttling
     Write-Host "Desativando Power Throttling..."
-    Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\Power\PowerThrottling" -Name "PowerThrottlingOff" -Type DWord -Value 00000001
+#    Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\Power\PowerThrottling" -Name "PowerThrottlingOff" -Type DWord -Value 00000001
     Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\Power" -Name "HiberbootEnabled" -Type DWord -Value 0000000
     
 # Boot NumLock 
@@ -407,7 +407,7 @@
         "Microsoft.CommsPhone"
         "Microsoft.ScreenSketch"
         "Microsoft.Xbox.TCUI"
-        "Microsoft.XboxGameOverlay"
+        #"Microsoft.XboxGameOverlay"
         "Microsoft.XboxGameCallableUI"
         "Microsoft.XboxSpeechToTextOverlay"
         "Microsoft.MixedReality.Portal"
