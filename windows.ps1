@@ -52,14 +52,7 @@
         New-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FlyoutMenuSettings" | Out-Null
     }
     Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FlyoutMenuSettings" -Name "ShowHibernateOption" -Type Dword -Value 0
-  
-# Rede Doméstica
-#    Write-Host "Desativando serviços Rede doméstica..."
-#    Stop-Service "HomeGroupListener" -WarningAction SilentlyContinue
-#    Set-Service "HomeGroupListener" -StartupType Manual
-#    Stop-Service "HomeGroupProvider" -WarningAction SilentlyContinue
-#    Set-Service "HomeGroupProvider" -StartupType Manual
-  
+
 # Rastreamento de localização
     Write-Host "Desativando rastreamento de localizacao..."
     If (!(Test-Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\location")) {
@@ -68,7 +61,7 @@
     Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\location" -Name "Value" -Type String -Value "Deny"
     Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Sensor\Overrides\{BFA794E4-F964-4FDB-90F6-51056BFE4B44}" -Name "SensorPermissionState" -Type DWord -Value 0
     Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\lfsvc\Service\Configuration" -Name "Status" -Type DWord -Value 0
-    Write-Host "Desativando atualizações de Mapas offline"
+    Write-Host "Desativando atualizacoes de Mapas offline"
     Set-ItemProperty -Path "HKLM:\SYSTEM\Maps" -Name "AutoUpdateEnabled" -Type DWord -Value 0
   
 # O&O Shutup - App antispy/privacidade
@@ -158,8 +151,9 @@
         "vmicvmsession"                                # Fornece um mecanismo para gerenciar máquinas virtuais com o PowerShell por meio de sessão VM sem uma rede virtual
     )
         
+    Write-Host "Setando servicos para modo de inicializacao manual..."    
     foreach ($service in $services) {
-        Write-Host "Setando $service para modo de inicializacao manual..."
+        Write-Host "`t`$service"
         Get-Service -Name $service -ErrorAction SilentlyContinue | Set-Service -StartupType Manual
     }
   
@@ -225,7 +219,7 @@
     }
     Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Config" -Name "DODownloadMode" -Type DWord -Value 1
 
-    Write-Host "Desativando o serviço de rastreamento de diagnostico..."
+    Write-Host "Desativando o servico de rastreamento de diagnostico..."
     Stop-Service "DiagTrack" -WarningAction SilentlyContinue
     Set-Service "DiagTrack" -StartupType Disabled
 
@@ -501,31 +495,31 @@
     Enable-WindowsOptionalFeature -Online -FeatureName "NetFx3" -All
 
 # Winget 
-#    $wingetinstall = New-Object System.Collections.Generic.List[System.Object]
+    $wingetinstall = New-Object System.Collections.Generic.List[System.Object]
 
-#    $wingetinstall.Add("eloston.ungoogled-chromium")
-#    $wingetinstall.Add("LibreWolf.LibreWolf")
-#    $wingetinstall.Add("Discord.Discord")
-#    $wingetinstall.Add("EpicGames.EpicGamesLauncher")
-#    $wingetinstall.Add("Valve.Steam")
-#    $wingetinstall.Add("OBSProject.OBSStudio")
-#    $wingetinstall.Add("VideoLAN.VLC")
-#    $wingetinstall.Add("7zip.7zip")
-#    $wingetinstall.Add("KeePassXCTeam.KeePassXC")
-#    $wingetinstall.Add("Oracle.VirtualBox")
-#    $wingetinstall.Add("9P1TBXR6QDCX") # HyperX nGENUITY
-#    $wingetinstall.Add("WhatsApp.WhatsApp")
+    $wingetinstall.Add("eloston.ungoogled-chromium")
+    $wingetinstall.Add("LibreWolf.LibreWolf")
+    $wingetinstall.Add("Discord.Discord")
+    $wingetinstall.Add("EpicGames.EpicGamesLauncher")
+    $wingetinstall.Add("Valve.Steam")
+    $wingetinstall.Add("OBSProject.OBSStudio")
+    $wingetinstall.Add("VideoLAN.VLC")
+    $wingetinstall.Add("7zip.7zip")
+    $wingetinstall.Add("KeePassXCTeam.KeePassXC")
+    $wingetinstall.Add("Oracle.VirtualBox")
+    $wingetinstall.Add("9P1TBXR6QDCX") # HyperX nGENUITY
+    $wingetinstall.Add("WhatsApp.WhatsApp")
     
-#    $wingetinstall.ToArray()
+    $wingetinstall.ToArray()
     # Define Output variable
-#    $wingetResult = New-Object System.Collections.Generic.List[System.Object]
-#    foreach ( $node in $wingetinstall )
-#    {
-#        Start-Process powershell.exe -Verb RunAs -ArgumentList "-command winget install -e --accept-source-agreements --accept-package-agreements --silent $node | Out-Host" -Wait -WindowStyle Maximized
-#        $wingetResult.Add("$node`n")
-#    }
-#    $wingetResult.ToArray()
-#    $wingetResult | % { $_ } | Out-Host
+    $wingetResult = New-Object System.Collections.Generic.List[System.Object]
+    foreach ( $node in $wingetinstall )
+    {
+        Start-Process powershell.exe -Verb RunAs -ArgumentList "-command winget install -e --accept-source-agreements --accept-package-agreements --silent $node | Out-Host" -Wait -WindowStyle Maximized
+        $wingetResult.Add("$node`n")
+    }
+    $wingetResult.ToArray()
+    $wingetResult | % { $_ } | Out-Host
 
-#    Write-Host "Programas instalados..."
-#    Write-Host $wingetResult
+    Write-Host "Programas instalados..."
+    Write-Host $wingetResult
