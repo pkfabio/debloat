@@ -6,7 +6,7 @@
 #>
 
 #===========================================================================
-# Conta de usuário
+# Configurações
 #===========================================================================
 
 # Profile
@@ -20,9 +20,17 @@
     New-LocalUser "pk" -Password $Password -FullName "Fábio" -Description "Usuário padrão"
     Add-LocalGroupMember -Group "Administrators" -Member "pk"
     
+# Nome e Grupo do computador 
+   Rename-Computer -NewName "Fabio-pc"
+	Add-Computer -WorkGroupName "LAN"
+
 #===========================================================================
 # Tweak's
 #===========================================================================
+
+# Dump de memoria
+    Write-Host "Desativando despejo de memória na inicialização..."
+    Get-WmiObject -Class Win32_OSRecoveryConfiguration -EnableAllPrivileges | Set-WmiInstance -Arguments @{ DebugInfoType=0 } | Out-Null
 
 # Histórico de Atividades
     Write-Host "Desativando histórico de atividades..."
