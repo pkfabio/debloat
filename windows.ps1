@@ -54,11 +54,11 @@
     Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FlyoutMenuSettings" -Name "ShowHibernateOption" -Type Dword -Value 0
   
 # Rede Doméstica
-    Write-Host "Desativando serviços Rede doméstica..."
-    Stop-Service "HomeGroupListener" -WarningAction SilentlyContinue
-    Set-Service "HomeGroupListener" -StartupType Manual
-    Stop-Service "HomeGroupProvider" -WarningAction SilentlyContinue
-    Set-Service "HomeGroupProvider" -StartupType Manual
+#    Write-Host "Desativando serviços Rede doméstica..."
+#    Stop-Service "HomeGroupListener" -WarningAction SilentlyContinue
+#    Set-Service "HomeGroupListener" -StartupType Manual
+#    Stop-Service "HomeGroupProvider" -WarningAction SilentlyContinue
+#    Set-Service "HomeGroupProvider" -StartupType Manual
   
 # Rastreamento de localização
     Write-Host "Desativando rastreamento de localização..."
@@ -408,7 +408,7 @@
         "Microsoft.ScreenSketch"
         "Microsoft.Xbox.TCUI"
         #"Microsoft.XboxGameOverlay"
-        "Microsoft.XboxGameCallableUI"
+        #"Microsoft.XboxGameCallableUI"
         "Microsoft.XboxSpeechToTextOverlay"
         "Microsoft.MixedReality.Portal"
         "Microsoft.XboxIdentityProvider"
