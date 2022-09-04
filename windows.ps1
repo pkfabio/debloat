@@ -500,31 +500,31 @@
     Enable-WindowsOptionalFeature -Online -FeatureName "NetFx3" -All
 
 # Winget 
-    $wingetinstall = New-Object System.Collections.Generic.List[System.Object]
+#    $wingetinstall = New-Object System.Collections.Generic.List[System.Object]
 
-    $wingetinstall.Add("eloston.ungoogled-chromium")
-    $wingetinstall.Add("LibreWolf.LibreWolf")
-    $wingetinstall.Add("Discord.Discord")
-    $wingetinstall.Add("EpicGames.EpicGamesLauncher")
-    $wingetinstall.Add("Valve.Steam")
-    $wingetinstall.Add("OBSProject.OBSStudio")
-    $wingetinstall.Add("VideoLAN.VLC")
-    $wingetinstall.Add("7zip.7zip")
-    $wingetinstall.Add("KeePassXCTeam.KeePassXC")
-    $wingetinstall.Add("Oracle.VirtualBox")
-    $wingetinstall.Add("9P1TBXR6QDCX") # HyperX nGENUITY
-    $wingetinstall.Add("WhatsApp.WhatsApp")
+#    $wingetinstall.Add("eloston.ungoogled-chromium")
+#    $wingetinstall.Add("LibreWolf.LibreWolf")
+#    $wingetinstall.Add("Discord.Discord")
+#    $wingetinstall.Add("EpicGames.EpicGamesLauncher")
+#    $wingetinstall.Add("Valve.Steam")
+#    $wingetinstall.Add("OBSProject.OBSStudio")
+#    $wingetinstall.Add("VideoLAN.VLC")
+#    $wingetinstall.Add("7zip.7zip")
+#    $wingetinstall.Add("KeePassXCTeam.KeePassXC")
+#    $wingetinstall.Add("Oracle.VirtualBox")
+#    $wingetinstall.Add("9P1TBXR6QDCX") # HyperX nGENUITY
+#    $wingetinstall.Add("WhatsApp.WhatsApp")
     
-    $wingetinstall.ToArray()
+#    $wingetinstall.ToArray()
     # Define Output variable
-    $wingetResult = New-Object System.Collections.Generic.List[System.Object]
-    foreach ( $node in $wingetinstall )
-    {
-        Start-Process powershell.exe -Verb RunAs -ArgumentList "-command winget install -e --accept-source-agreements --accept-package-agreements --silent $node | Out-Host" -Wait -WindowStyle Maximized
-        $wingetResult.Add("$node`n")
-    }
-    $wingetResult.ToArray()
-    $wingetResult | % { $_ } | Out-Host
+#    $wingetResult = New-Object System.Collections.Generic.List[System.Object]
+#    foreach ( $node in $wingetinstall )
+#    {
+#        Start-Process powershell.exe -Verb RunAs -ArgumentList "-command winget install -e --accept-source-agreements --accept-package-agreements --silent $node | Out-Host" -Wait -WindowStyle Maximized
+#        $wingetResult.Add("$node`n")
+#    }
+#    $wingetResult.ToArray()
+#    $wingetResult | % { $_ } | Out-Host
 
-    Write-Host "Programas instalados..."
-    Write-Host $wingetResult
+#    Write-Host "Programas instalados..."
+#    Write-Host $wingetResult
