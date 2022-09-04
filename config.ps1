@@ -374,7 +374,7 @@
         "Microsoft.Wallet"
         "Microsoft.Whiteboard"
         "Microsoft.WindowsAlarms"
-        "microsoft.windowscommunicationsapps"
+        "Microsoft.windowscommunicationsapps"
         "Microsoft.WindowsFeedbackHub"
         "Microsoft.WindowsMaps"
         "Microsoft.WindowsPhone"
